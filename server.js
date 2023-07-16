@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 // eslint-disable-next-line no-unused-vars
 const Task = require('./api/models/todoListModel');
+const Cloud = require('./api/models/multiCloudModel');
 // created model loading here
 
 const bodyParser = require('body-parser');
@@ -31,7 +32,9 @@ app.get('/', (req, res) => {
 });
 
 const routes = require('./api/routes/todoListRoutes'); // importing route
+const routes1 = require('./api/routes/multiCloudRoutes'); // importing route
 routes(app); // register the route
+routes1(app); // register the route
 
 app.listen(port, () => {
   console.log('Node.js + MongoDB RESTful API server started on: ' + port);

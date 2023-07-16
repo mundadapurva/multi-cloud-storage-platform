@@ -4,12 +4,12 @@ const multerS3 = require('multer-s3');
 
 
 aws.config.update({
-    secretAccessKey: process.env.AWS_ACCESS_SECRET,
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    region: process.env.AWS_REGION,
+    secretAccessKey: "wvlO/RHpSP1IebkBn4xiLgIj3SB30qLMRS8GpNdA",
+    accessKeyId: "AKIAXIICH77FCL42BLFF",
+    region: "us-west-2",
 
 });
-const BUCKET = process.env.AWS_BUCKET
+const BUCKET = "purva4bucket"
 const s3 = new aws.S3();
 
 const upload = multer({
@@ -31,7 +31,7 @@ async function uploadFile(file) {
 }
 
 
-async function listFiles() {
+exports.listFiles = async function() {
     let r = await s3.listObjectsV2({ Bucket: BUCKET }).promise();
     let x = r.Contents.map(item => item.Key);
     return x;

@@ -31,7 +31,7 @@ const deleteContainer = async () => {
 };
 
 
-const listFiles = async () => {
+async function listFiles() {
     fileList.size = 0;
     fileList.innerHTML = "";
     try {
