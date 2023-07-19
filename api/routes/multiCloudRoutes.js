@@ -5,14 +5,16 @@ module.exports = function(app) {
   const aws = require('../services/awsServices.cjs');
   const azure = require('../services/azureServices');
 
+  // try if else here for location
+
   // cloud Routes
   app
     .route('/cloud/:location')
     .get(cloud.list_all_files)
 
   app
-    .route('/cloud/upload/:location')
-    .post(aws.upload.single('file'), cloud.upload_a_file);
+    .route('/cloud/aws/upload')
+    .post(aws.upload.single('file'), cloud.upload_a_file_aws);
 
   app.route('/cloud/azure/upload')
     .post(azure.upload.single('file'), cloud.upload_a_file_azure);

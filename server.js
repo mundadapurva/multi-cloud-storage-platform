@@ -27,6 +27,13 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  next();
+});
+
 app.get('/', (req, res) => {
   res.send('Hello');
 });

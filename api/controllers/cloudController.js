@@ -9,13 +9,12 @@ const azure = require('../services/azureServices')
 exports.list_all_files = async function(req, res) {
   // if req. location == 'AWS' then list all files from AWS
   // else if req. location == 'Azure' then list all files from Azure
-  let x = 0;
+  let x = "null";
   console.log(req.params.location)
   if (req.params.location == 'AWS') {
     // list all files from AWS
     x = await aws.listFiles()
     console.log(x)
-    console.log('AWS')
   }
 
   if (req.params.location == 'Azure') {
@@ -25,11 +24,12 @@ exports.list_all_files = async function(req, res) {
     console.log(x)
   }
 
-  res.json({ message: x });
+
+  res.status(200).send({message: x})
 
 }
 
-exports.upload_a_file = async function(req, res, next) {
+exports.upload_a_file_aws = async function(req, res) {
   console.log(req.params.location)
   console.log(req.body.file)
   if (req.params.location == 'AWS') {
