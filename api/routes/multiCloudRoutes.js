@@ -2,12 +2,20 @@
 
 module.exports = function(app) {
   const cloud = require('../controllers/cloudController');
+  const aws = require('../services/awsServices.cjs');
+  const azure = require('../services/azureServices');
 
   // cloud Routes
   app
-    .route('/cloud')
+    .route('/cloud/:location')
     .get(cloud.list_all_files)
-    .post(cloud.upload_a_file);
+
+  app
+    .route('/cloud/upload/:location')
+    .post(aws.upload.single('file'), cloud.upload_a_file);
+
+  app.route('/cloud/azure/upload')
+    .post(azure.upload.single('file'), cloud.upload_a_file_azure);
 
   app
     .route('/cloud/:fileName')
