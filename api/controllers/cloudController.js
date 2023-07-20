@@ -132,7 +132,8 @@ exports.delete_a_file = async function(req, res) {
 
   Cloud.remove({
     file_name: req.params.fileName,
-    location: req.params.location
+    location: req.params.location,
+    created_by: req.body.created_by
   }, function(err, cloud) {
     if (err != null) {
       res.send(err);
