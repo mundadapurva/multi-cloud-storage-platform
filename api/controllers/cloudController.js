@@ -5,7 +5,8 @@ var stream = require('stream');
 
 const Cloud = mongoose.model('Cloud');
 const aws = require('../services/awsServices.cjs')
-const azure = require('../services/azureServices')
+const azure = require('../services/azureServices');
+const { create } = require('domain');
 
 exports.list_all_files = async function(req, res) {
   // if req. location == 'AWS' then list all files from AWS
@@ -37,6 +38,21 @@ exports.upload_a_file_aws = async function(req, res) {
     // list all files from AWS
     await aws.uploadFile()
 
+    const cloud = Cloud({
+      file_name: req.body.fileName,
+      created_by: req.body.created_by,
+      location: req.body.location,
+      created_date: Date.now()
+    });
+
+    console.log(cloud)
+
+    cloud.save(function(err, cloud) {
+      if (err != null) {
+        res.send(err);
+      }
+    });
+
   res.json({ message: 'upload_a_file_aws' });
 }
 
@@ -47,6 +63,21 @@ exports.upload_a_file_azure = async function(req, res, next) {
   console.log(req.body.location)
 
   await azure.uploadFiles()
+
+  const cloud = Cloud({
+    file_name: req.body.fileName,
+    created_by: req.body.created_by,
+    location: req.body.location,
+    created_date: Date.now()
+  });
+
+  console.log(cloud)
+
+  cloud.save(function(err, cloud) {
+    if (err != null) {
+      res.send(err);
+    }
+  });
 
   res.json({ message: 'upload_a_file_azure' });
 }
@@ -98,6 +129,15 @@ exports.delete_a_file = async function(req, res) {
     let x = await azure.deleteFiles(req.params.fileName)
     console.log(x)
   }
+
+  Cloud.remove({
+    file_name: req.params.fileName,
+    location: req.params.location
+  }, function(err, cloud) {
+    if (err != null) {
+      res.send(err);
+    }
+  });
 
   res.json({ message: 'delete_a_file' });
 }
