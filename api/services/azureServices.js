@@ -175,23 +175,22 @@ exports.deleteFiles = async function(fileName) {
 
 // TODO: Download files
 exports.downloadFiles = async function(fileName) {
+    let downloadedContent = null;
     try {
-        // if (fileList.selectedOptions.length > 0) {
-            console.log("Downloading files...");
-            // for (const option of fileList.selectedOptions) {
-                const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-                var x = await blockBlobClient.downloadToFile(fileName);
-            // }
-            console.log("Done.");
-            // listFiles();
-        // } else {
-        //     console.log("No files selected.");
-        // }
-        return x;
+        console.log("Downloading files...");
+        const blobName = fileName;
+
+        const blobClient = containerClient.getBlobClient(blobName);
+        console.log(blobClient.url);
+        return blobClient.url;
+        const downloadBlockBlobResponse = await blobClient.download(0);
+        downloadedContent = await downloadBlockBlobResponse.blobBody;
     }
     catch (error) {
             console.log(error.message);
     }
+
+    return downloadedContent;
 };
 
 // const downloadFile = async () => {

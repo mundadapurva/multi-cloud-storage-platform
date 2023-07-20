@@ -1,6 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
+var stream = require('stream');
 
 const Cloud = mongoose.model('Cloud');
 const aws = require('../services/awsServices.cjs')
@@ -30,49 +31,50 @@ exports.list_all_files = async function(req, res) {
 }
 
 exports.upload_a_file_aws = async function(req, res) {
-  console.log(req.params.location)
-  console.log(req.body.file)
-  if (req.params.location == 'AWS') {
+
+    console.log(req.body.location)
+    console.log(req.body.file)
     // list all files from AWS
     await aws.uploadFile()
 
-  }
-
-  if (req.params.location == 'Azure') {
-    // list all files from Azure
-    let x = await azure.uploadFiles(req.body.file)
-    console.log(x)
-  }
-
-  res.json({ message: 'upload_a_file' });
+  res.json({ message: 'upload_a_file_aws' });
 }
 
 exports.upload_a_file_azure = async function(req, res, next) {
 
-  console.log(req.body.file)
+  // console.log(req.body.file)
 
-  await azure.uploadFiles(req.body.file)
+  console.log(req.body.location)
+
+  await azure.uploadFiles()
 
   res.json({ message: 'upload_a_file_azure' });
 }
 
 exports.read_a_file = async function(req, res) {
-  console.log(req.body.location)
-  console.log(req.params.fileName)
-  if (req.body.location == 'AWS') {
+  console.log(req.params)
+  if (req.params.location == 'AWS') {
     // list all files from AWS
     let x = await aws.downloadFile(req.params.fileName)
     console.log(x)
-    console.log('AWS')
-    res.send(x)
+    res.json({'message': x})
+    // var fileContents = Buffer.from(x, "base64");
+
+    // console.log(fileContents)
+    // var readStream = new stream.PassThrough();
+    // readStream.end(fileContents);
+
+    // // res.set('Content-disposition', 'attachment; filename=' + req.params.fileName);
+    // // res.set('Content-Type', 'text/plain');
+
+    // readStream.pipe(res);
   }
 
-  if (req.body.location == 'Azure') {
+  if (req.params.location == 'Azure') {
     // list all files from Azure
     let x = await azure.downloadFiles(req.params.fileName)
-    // TODO: send file to client
-    console.log(x)
-    res.send(x)
+    console.log("return "+ x)
+    res.json({'message': {'data': x}})
   }
 
   // res.json({ message: 'list_all_files' });
@@ -84,14 +86,14 @@ exports.update_a_file = function(req, res) {
 exports.delete_a_file = async function(req, res) {
   console.log(req.body.location)
   console.log(req.params.fileName)
-  if (req.body.location == 'AWS') {
+  if (req.params.location == 'AWS') {
     // list all files from AWS
     let x = await aws.deleteFile(req.params.fileName)
     console.log(x)
     console.log('AWS')
   }
 
-  if (req.body.location == 'Azure') {
+  if (req.params.location == 'Azure') {
     // list all files from Azure
     let x = await azure.deleteFiles(req.params.fileName)
     console.log(x)

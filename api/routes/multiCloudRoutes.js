@@ -5,24 +5,24 @@ module.exports = function(app) {
   const aws = require('../services/awsServices.cjs');
   const azure = require('../services/azureServices');
 
-  // try if else here for location
-
   // cloud Routes
   app
-    .route('/cloud/:location')
+    .route('/cloud/read/:location')
     .get(cloud.list_all_files)
 
   app
-    .route('/cloud/aws/upload')
+    .route('/cloud/upload/AWS')
     .post(aws.upload.single('file'), cloud.upload_a_file_aws);
 
-  app.route('/cloud/azure/upload')
+  app.route('/cloud/upload/Azure')
     .post(azure.upload.single('file'), cloud.upload_a_file_azure);
 
   app
-    .route('/cloud/:fileName')
+    .route('/cloud/:location/:fileName')
     .get(cloud.read_a_file)
-    .put(cloud.update_a_file)
+
+  app.
+    route('/cloud/delete/:location/:fileName')
     .delete(cloud.delete_a_file);
 
 };
