@@ -2,14 +2,15 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 // const { listFiles } = require("./awsServices.cjs");
 // const { ImportExport } = require("aws-sdk");
 const multer = require("multer");
-var multerAzure = require('multer-azure')
+var multerAzure = require('multer-azure');
+require('dotenv').config();
 
 exports.upload = multer({
     storage: multerAzure({
-        connectionString: 'DefaultEndpointsProtocol=https;AccountName=purva1;AccountKey=lqs1GKXGusWXmB37HIiBfQMY9X8IoK9X5fJxceWK6tKywYWkvUp3flA1PpyclxTA64FYRltjvBMS+AStpXTydw==;EndpointSuffix=core.windows.net', //Connection String for azure storage account, this one is prefered if you specified, fallback to account and key if not.
-        account: 'purva1', //The name of the Azure storage account
-        key: 'lqs1GKXGusWXmB37HIiBfQMY9X8IoK9X5fJxceWK6tKywYWkvUp3flA1PpyclxTA64FYRltjvBMS+AStpXTydw==', //A key listed under Access keys in the storage account pane
-        container: 'purva-container1',  //Any container name, it will be created if it doesn't exist
+        connectionString: process.env.AZURE_CONNECTION_STRING, //Connection String for azure storage account, this one is prefered if you specified, fallback to account and key if not.
+        account: process.env.AZURE_ACCOUNT, //The name of the Azure storage account
+        key: process.env.AZURE_KEY, //A key listed under Access keys in the storage account pane
+        container: process.env.AZURE_CONTAINER,  //Any container name, it will be created if it doesn't exist
         blobPathResolver: function(req, file, callback){
           var blobPath = file.originalname; //Calculate blobPath in your own way.
           callback(null, blobPath);
@@ -19,7 +20,7 @@ exports.upload = multer({
 });
 
 // Update <placeholder> with your Blob service SAS URL string
-const blobSasUrl = "https://purva1.blob.core.windows.net/?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2023-10-09T21:01:51Z&st=2023-07-15T13:01:51Z&spr=https&sig=bolWnNqAf21whiTnTxGzNL%2BejW8loExgqZqdGW7bqto%3D";
+const blobSasUrl = process.env.AZURE_CONNECTION_URL;
 const blobServiceClient = new BlobServiceClient(blobSasUrl);
 
 // Create a unique name for the container by

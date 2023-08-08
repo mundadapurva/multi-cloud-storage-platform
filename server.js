@@ -1,10 +1,11 @@
 const express = require('express');
-
+const env = require('dotenv').config();
 const app = express();
 
 const port = process.env.PORT || 3000;
 
 const mongoose = require('mongoose');
+
 
 // eslint-disable-next-line no-unused-vars
 const Task = require('./api/models/todoListModel');
@@ -16,7 +17,7 @@ const bodyParser = require('body-parser');
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose
-  .connect('mongodb+srv://mundadapurva02:purva1@cluster0.mjnx7ab.mongodb.net/?retryWrites=true&w=majority', {
+  .connect(process.env.MONGODB_CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })

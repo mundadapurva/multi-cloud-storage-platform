@@ -1,15 +1,15 @@
 const aws = require('aws-sdk')
 const multer = require('multer')
 const multerS3 = require('multer-s3');
-
+require('dotenv').config();
 
 aws.config.update({
-    secretAccessKey: "wvlO/RHpSP1IebkBn4xiLgIj3SB30qLMRS8GpNdA",
-    accessKeyId: "AKIAXIICH77FCL42BLFF",
-    region: "us-west-2",
+    secretAccessKey: process.env.AWS_ACCESS_SECRET,
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    region: process.env.AWS_REGION,
 
 });
-const BUCKET = "purva4bucket"
+const BUCKET = process.env.AWS_BUCKET
 const s3 = new aws.S3();
 
 exports.upload = multer({
